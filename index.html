@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Memo</title>
+    <link rel="stylesheet" type="text/css" href="./memo.css">  
+</head>
+<body>
+    <div class='settings'>
+        <div class='amnt_slider'>
+            <label for="s_tiles_amnt">Amount of tiles:</label>
+            <input type='range' class='slider' id='s_tiles_amnt' min=1 max=5 step=1 value=2>
+            <input type='text' class='slider_info' id='tiles_config'>
+        </div>
+        <div class='level_slider'>
+            <label for="s_level">Level:</label>
+            <input type='range' class='slider' id='s_level' min=1 max=5 step=1 value=2>
+            <input type='text' class='slider_info' id='level_config'>
+        </div>
+        <div class='button'>
+            <input type='button' value='Start' id='btn_start'/>
+        </div>
+    </div>
+    <div class='container' >
+    </div>
+    <div id="message">
+        <p>Your turn</p>
+    </div>
+    <script type="text/javascript" src="memo.js"></script>
+</body>
+</html>
