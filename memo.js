@@ -4,7 +4,6 @@
 // - логика хода робота el.dispatchEvent(new Event('click'));
 // - доделать стили 
 // - реализовать уровни сложности - процент "запоминания" 
-// - github repo
 // - сайт на github
 // - как использовать для обучения/запоминания?
 
@@ -51,7 +50,7 @@ class Game {
         el.value = elSliderAmnt.value;
         let amnt = parseInt(elSliderAmnt.value);
         this.setField(amnt);
-        this.party.setPairsAmnt(this.field.pairs);
+        this.party.setPartyField(this.field);
 
     }
 
@@ -115,8 +114,8 @@ class Game {
     createTiles(){
         elContainer.textContent = '';
 
-        for (let i = 1; i <= this.field.rows; i++){
-            for(let j = 1; j <= this.field.cols; j++)
+        for (let i = 1; i <= this.field.cols; i++){
+            for(let j = 1; j <= this.field.rows; j++)
             {
                 this.createSingleTile(i,j);
             }
@@ -126,9 +125,9 @@ class Game {
         elContainer.style.setProperty('grid-template-columns', `repeat(${this.field.rows}, 1fr)`);
     }
 
-    createSingleTile(row ,col){
+    createSingleTile(col ,row){
         let el_tile = document.createElement('div');
-        el_tile.id = `t_${row}_${col}`;
+        el_tile.id = `t_${col}_${row}`;
         el_tile.className = 'tile';
     
         let el_card_inner = document.createElement('div');
@@ -186,13 +185,14 @@ class Party {
         this.started = false;
     }
 
-    setPairsAmnt(pairs){
-        this.pairsLeft = pairs;
+    setPartyField(field){
+        this.pairsLeft = field.pairs;
+        this.robotPlayer.updFieldInfo(field);
     }
 
     processMove(e){
-        if (!this.started || this.robotMoving){
-            return;
+        if (!this.started ){ //|| this.robotMoving
+            return; 
         }
 
         let e_in = e.currentTarget; 
@@ -229,27 +229,42 @@ class Party {
     }
 
     checkResult(){
+        let moveData = {};
+        this.selectedElements.forEach(element => {
+            moveData[element.id] = element.dataset.img_id;
+        });
+        let mode;
+
         if (this.selectedElements[0].dataset.img_id == this.selectedElements[1].dataset.img_id){
             setTimeout(() => {
                 this.selectedElements.forEach(element => {
                     element.style.visibility = 'hidden';
                 })
                 this.selectedElements = []; 
+                this.currentPlayer.addPoint();
                 this.moveStatus = moveStatus.ready;
                 this.changePlayer();
             }, 1000);
-        } 
+            mode = 'R'; // remove
+        } else {
+            mode = 'O'; // open
+        }
+
+        this.robotPlayer.updateMemory({ mode: mode,
+                                        moveData: moveData 
+        }); 
+
     }
 
     start(){
         this.randomChooseFirst();
         this.started = true;
 
-        while (this.pairsLeft > 0){
-            this.currentPlayer.makeMove();
-            this.checkResult();
-            this.changePlayer();
-        }
+        // while (this.pairsLeft > 0){
+        //     this.currentPlayer.makeMove();
+        //     // this.checkResult();
+        //     this.changePlayer();
+        // }
         // this.defineWinner();
     }
 
@@ -266,6 +281,7 @@ class Party {
             elMsg.style.visibility = 'hidden';
             this.robotMoving = true;
         }
+        this.currentPlayer.makeMove();
         // elMsg.style.visibility = (this.currentPlayer === this.humanPlayer) ?  'visible' : 'hidden';
         // this.humanMoving = !this.humanMoving;
     }
@@ -282,14 +298,63 @@ class Player {
     constructor(){
         this.score = 0;
     }
+
+    addPoint(){
+        this.score += 1;
+    }
+
+    makeMove(){
+        
+    }
 }
 
 class Robot extends Player {
     makeMove(){
         console.log('My robo move!');
+        this.makeRandomMove();
+    }
+
+    updFieldInfo(field){
+        this.field = field;
+        this.initMyMemory();
+    }
+
+    makeRandomMove(){
+        let i = 0;
+        while(i<2){
+            let el_id = this.unknownTiles[Math.floor(Math.random() * this.unknownTiles.length)]
+            document.querySelector(`#${el_id}`).dispatchEvent(new Event('click'));
+            i++;
+        }
+    }
+
+    updateMemory(data){
+        switch (data.mode){
+            case 'O':
+                this.knownTiles = {...this.knownTiles, ...data.moveData};
+                for (let key in data.moveData){
+                    this.unknownTiles = this.unknownTiles.filter( val => val != key  );
+                }
+                break;
+            
+            case 'R':
+                break;            
+        }
+    }
+
+    initMyMemory(){
+        this.knownTiles = {};
+        this.unknownTiles = [];
+        for(let i=1; i<=this.field.cols; i++){
+            for(let j=1; j<=this.field.rows; j++){
+                this.unknownTiles.push(`t_${i}_${j}`)
+            }
+        }
     }
 }
 
 class Human extends Player {
+    // makeMove(){
 
+    // }
 }
