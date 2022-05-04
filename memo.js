@@ -1,12 +1,3 @@
-// TODO:
-// - комментарии
-// - рефакторинг
-// - логика хода робота el.dispatchEvent(new Event('click'));
-// - доделать стили 
-// - реализовать уровни сложности - процент "запоминания" 
-// - сайт на github
-// - как использовать для обучения/запоминания?
-
 // количество 24(4x6), 28(4x7), 30(5x6), 40(5x8), 50(5x10)
 
 const SRC_COVER = 'icons/cover.png';
@@ -259,13 +250,6 @@ class Party {
     start(){
         this.randomChooseFirst();
         this.started = true;
-
-        // while (this.pairsLeft > 0){
-        //     this.currentPlayer.makeMove();
-        //     // this.checkResult();
-        //     this.changePlayer();
-        // }
-        // this.defineWinner();
     }
 
     changePlayer(){
@@ -282,8 +266,6 @@ class Party {
             this.robotMoving = true;
         }
         this.currentPlayer.makeMove();
-        // elMsg.style.visibility = (this.currentPlayer === this.humanPlayer) ?  'visible' : 'hidden';
-        // this.humanMoving = !this.humanMoving;
     }
 
     randomChooseFirst(){   
@@ -334,11 +316,15 @@ class Robot extends Player {
                 this.knownTiles = {...this.knownTiles, ...data.moveData};
                 for (let key in data.moveData){
                     this.unknownTiles = this.unknownTiles.filter( val => val != key  );
-                }
+                }            
                 break;
             
             case 'R':
-                break;            
+                for (let key in data.moveData){
+                    this.unknownTiles = this.unknownTiles.filter( val => val != key  );
+                    delete this.knownTiles[key];
+                }            
+                break;
         }
     }
 
@@ -354,7 +340,4 @@ class Robot extends Player {
 }
 
 class Human extends Player {
-    // makeMove(){
-
-    // }
 }
