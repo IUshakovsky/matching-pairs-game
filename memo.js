@@ -1,3 +1,9 @@
+// TODO:
+// - Уровни - процент запоминания 
+// - sleep для ходов робота
+// - стили
+// - рефакторинг
+
 // количество 24(4x6), 28(4x7), 30(5x6), 40(5x8), 50(5x10)
 
 const SRC_COVER = 'icons/cover.png';
@@ -248,8 +254,8 @@ class Party {
     }
 
     start(){
-        this.randomChooseFirst();
         this.started = true;
+        this.randomChooseFirst();
     }
 
     changePlayer(){
@@ -293,7 +299,14 @@ class Player {
 class Robot extends Player {
     makeMove(){
         console.log('My robo move!');
-        this.makeRandomMove();
+        if (this.foundPairs.length > 0){
+            let nextMoveAr = this.foundPairs.pop();
+            nextMoveAr.forEach(element => {
+                document.querySelector(`#${element}`).dispatchEvent(new Event('click'));
+            });     
+        } else{
+            this.makeRandomMove();
+        }
     }
 
     updFieldInfo(field){
@@ -303,9 +316,14 @@ class Robot extends Player {
 
     makeRandomMove(){
         let i = 0;
+        let prev_el_ind = 0; 
         while(i<2){
-            let el_id = this.unknownTiles[Math.floor(Math.random() * this.unknownTiles.length)]
-            document.querySelector(`#${el_id}`).dispatchEvent(new Event('click'));
+            let el_ind = this.unknownTiles[Math.floor(Math.random() * this.unknownTiles.length)]
+            if (el_ind == prev_el_ind){
+                el_ind = this.unknownTiles.length % el_ind++;
+            }
+            document.querySelector(`#${el_ind}`).dispatchEvent(new Event('click'));
+            prev_el_ind = el_ind;
             i++;
         }
     }
@@ -313,9 +331,14 @@ class Robot extends Player {
     updateMemory(data){
         switch (data.mode){
             case 'O':
-                this.knownTiles = {...this.knownTiles, ...data.moveData};
                 for (let key in data.moveData){
                     this.unknownTiles = this.unknownTiles.filter( val => val != key  );
+                    let secondKey = this.checkInMemory(key,data.moveData[key]);
+                    if (secondKey != ''){
+                        this.foundPairs.push([key,secondKey]);
+                    } else {
+                        this.knownTiles[key] = data.moveData[key];
+                    }
                 }            
                 break;
             
@@ -328,9 +351,24 @@ class Robot extends Player {
         }
     }
 
+    checkInMemory(key,value){
+        if (Object.entries(this.knownTiles).length === 0){
+            return '';
+        }
+        for (let knownKey in this.knownTiles){
+            if (this.knownTiles[knownKey] == value && knownKey != key){
+                return knownKey;
+            }   
+        }
+        return '';
+
+    }
+
     initMyMemory(){
         this.knownTiles = {};
         this.unknownTiles = [];
+        this.foundPairs = [];
+        
         for(let i=1; i<=this.field.cols; i++){
             for(let j=1; j<=this.field.rows; j++){
                 this.unknownTiles.push(`t_${i}_${j}`)
