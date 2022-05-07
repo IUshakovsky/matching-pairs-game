@@ -1,6 +1,5 @@
 // TODO:
 // - Уровни - процент запоминания 
-// - sleep для ходов робота
 // - стили
 // - рефакторинг
 
@@ -25,7 +24,6 @@ window.onload = () =>  {
     game.setLevelVal();
 }
 
-
 class Game {
     constructor(){
         this.party = new Party();
@@ -48,7 +46,6 @@ class Game {
         let amnt = parseInt(elSliderAmnt.value);
         this.setField(amnt);
         this.party.setPartyField(this.field);
-
     }
 
     initializeImgs(){
@@ -240,7 +237,7 @@ class Party {
                 this.selectedElements = []; 
                 this.currentPlayer.addPoint();
                 this.moveStatus = moveStatus.ready;
-                this.changePlayer();
+                // this.changePlayer();
             }, 1000);
             mode = 'R'; // remove
         } else {
@@ -298,11 +295,11 @@ class Player {
 
 class Robot extends Player {
     makeMove(){
-        console.log('My robo move!');
         if (this.foundPairs.length > 0){
             let nextMoveAr = this.foundPairs.pop();
             nextMoveAr.forEach(element => {
-                document.querySelector(`#${element}`).dispatchEvent(new Event('click'));
+                // document.querySelector(`#${element}`).dispatchEvent(new Event('click'));
+                this.clickTile(element);
             });     
         } else{
             this.makeRandomMove();
@@ -314,6 +311,12 @@ class Robot extends Player {
         this.initMyMemory();
     }
 
+    clickTile(tile_id){
+        setTimeout(() => {
+                document.querySelector(`#${tile_id}`).dispatchEvent(new Event('click'));
+            }, 1000);
+    }
+
     makeRandomMove(){
         let i = 0;
         let prev_el_ind = 0; 
@@ -322,7 +325,8 @@ class Robot extends Player {
             if (el_ind == prev_el_ind){
                 el_ind = this.unknownTiles.length % el_ind++;
             }
-            document.querySelector(`#${el_ind}`).dispatchEvent(new Event('click'));
+            //document.querySelector(`#${el_ind}`).dispatchEvent(new Event('click'));
+            this.clickTile(el_ind);
             prev_el_ind = el_ind;
             i++;
         }
@@ -346,7 +350,8 @@ class Robot extends Player {
                 for (let key in data.moveData){
                     this.unknownTiles = this.unknownTiles.filter( val => val != key  );
                     delete this.knownTiles[key];
-                }            
+                    this.foundPairs = this.foundPairs.filter( item => item[0] == key || item[1] == key )
+                }
                 break;
         }
     }
