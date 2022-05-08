@@ -319,15 +319,18 @@ class Robot extends Player {
 
     makeRandomMove(){
         let i = 0;
-        let prev_el_ind = 0; 
+        let prevElIndex; 
+        let randomTileId;
         while(i<2){
-            let el_ind = this.unknownTiles[Math.floor(Math.random() * this.unknownTiles.length)]
-            if (el_ind == prev_el_ind){
-                el_ind = this.unknownTiles.length % el_ind++;
+            let randIndex = Math.floor(Math.random() * this.unknownTiles.length);
+            // let el_ind = this.unknownTiles[Math.floor(Math.random() * this.unknownTiles.length)]
+            if (randIndex == prevElIndex){
+                randIndex++;
             }
+            randomTileId = this.unknownTiles[randIndex]
             //document.querySelector(`#${el_ind}`).dispatchEvent(new Event('click'));
-            this.clickTile(el_ind);
-            prev_el_ind = el_ind;
+            this.clickTile(randomTileId);
+            // prev_el_ind = el_ind;
             i++;
         }
     }
@@ -361,12 +364,21 @@ class Robot extends Player {
             return '';
         }
         for (let knownKey in this.knownTiles){
-            if (this.knownTiles[knownKey] == value && knownKey != key){
+            if (this.knownTiles[knownKey] == value && knownKey != key && !this.checkInFoundPairs(key) ){
                 return knownKey;
             }   
         }
         return '';
 
+    }
+
+    checkInFoundPairs(key){
+        this.foundPairs.forEach(pair => {
+            if ( pair[0] == key || pair[1] == key ){
+                return true;
+            }
+        });
+        return false;
     }
 
     initMyMemory(){
