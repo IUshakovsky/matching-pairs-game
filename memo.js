@@ -237,7 +237,6 @@ class Party {
                 this.selectedElements = []; 
                 this.currentPlayer.addPoint();
                 this.moveStatus = moveStatus.ready;
-                // this.changePlayer();
             }, 1000);
             mode = 'R'; // remove
         } else {
@@ -298,7 +297,6 @@ class Robot extends Player {
         if (this.foundPairs.length > 0){
             let nextMoveAr = this.foundPairs.pop();
             nextMoveAr.forEach(element => {
-                // document.querySelector(`#${element}`).dispatchEvent(new Event('click'));
                 this.clickTile(element);
             });     
         } else{
@@ -317,22 +315,29 @@ class Robot extends Player {
             }, 1000);
     }
 
-    makeRandomMove(){
-        let i = 0;
-        let prevElIndex; 
+    getRandIndex(prevElIndex){
         let randomTileId;
-        while(i<2){
-            let randIndex = Math.floor(Math.random() * this.unknownTiles.length);
-            // let el_ind = this.unknownTiles[Math.floor(Math.random() * this.unknownTiles.length)]
-            if (randIndex == prevElIndex){
-                randIndex++;
-            }
-            randomTileId = this.unknownTiles[randIndex]
-            //document.querySelector(`#${el_ind}`).dispatchEvent(new Event('click'));
-            this.clickTile(randomTileId);
-            // prev_el_ind = el_ind;
-            i++;
+        let randIndex = Math.floor(Math.random() * this.unknownTiles.length);
+        if (randIndex == prevElIndex){
+            randIndex++;
         }
+        randomTileId = this.unknownTiles[randIndex];
+        return [randIndex, randomTileId];
+    }
+
+    makeRandomMove(){
+        let [randomElIndex, randomTileId] = this.getRandIndex(undefined);
+        let img_id;
+        this.clickTileAs(randomTileId).then( (x) => { 
+            img_id = x ;
+            let pair_id = this.checkInMemory(randomTileId, img_id);
+            if (pair_id != ''){
+                this.clickTile(pair_id);
+            } else {
+                [randomElIndex,randomTileId] = this.getRandIndex(randomElIndex);
+                this.clickTile(randomTileId); 
+            }
+        });
     }
 
     updateMemory(data){
@@ -392,7 +397,21 @@ class Robot extends Player {
             }
         }
     }
+
+    async clickTileAs(tile_id){
+        let pr = new Promise( (resolve, reject ) =>
+                                setTimeout(() => {
+                                    let target = document.querySelector(`#${tile_id}`);
+                                    target.dispatchEvent(new Event('click'));
+                                    console.log(target.dataset.img_id);
+                                    resolve( target.dataset.img_id );
+                                }, 1000)
+        );
+        let result = await pr;
+        return result;
+    }
 }
 
 class Human extends Player {
 }
+
