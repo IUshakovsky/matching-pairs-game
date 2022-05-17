@@ -1,4 +1,7 @@
 // TODO:
+// - завершение игры
+// - табло со счетом
+// - блокировка во время хода робота
 // - Уровни - процент запоминания 
 // - стили
 // - рефакторинг
@@ -236,6 +239,11 @@ class Party {
                 })
                 this.selectedElements = []; 
                 this.currentPlayer.addPoint();
+                this.pairsLeft--;
+                if ( this.pairsLeft == 0 ){
+                    this.finish();
+                    return;
+                }
                 this.moveStatus = moveStatus.ready;
             }, 1000);
             mode = 'R'; // remove
@@ -248,10 +256,15 @@ class Party {
         }); 
 
     }
-
+    
     start(){
         this.started = true;
         this.randomChooseFirst();
+    }
+
+    finish(){
+        this.started = false;
+        alert('Game is over!');
     }
 
     changePlayer(){
@@ -323,6 +336,8 @@ class Robot extends Player {
         }
         randomTileId = this.unknownTiles[randIndex];
         return [randIndex, randomTileId];
+        console.log('rt_id ' + randomTileId);
+
     }
 
     makeRandomMove(){
