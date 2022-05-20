@@ -1,6 +1,5 @@
 // TODO:
 // - завершение игры
-// - табло со счетом
 // - блокировка во время хода робота
 // - Уровни - процент запоминания 
 // - стили
@@ -16,6 +15,7 @@ const elSliderAmnt = document.querySelector('#s_tiles_amnt');
 const elSliderLevel = document.querySelector('#s_level');
 const elMsg = document.querySelector('#message');
 const elBtnStart = document.querySelector('#btn_start');
+const elScoreboard = document.querySelector('#scoreboard');
 
 
 window.onload = () =>  { 
@@ -173,8 +173,8 @@ moveStatus = {
 class Party {
 
     constructor(){
-        this.humanPlayer = new Human();
-        this.robotPlayer = new Robot();
+        this.humanPlayer = new Human('human_score');
+        this.robotPlayer = new Robot('robot_score');
         this.currentPlayer = new Player();
 
         this.moveStatus = moveStatus.ready;
@@ -188,7 +188,7 @@ class Party {
     }
 
     processMove(e){
-        if (!this.started ){ //|| this.robotMoving
+        if (!this.started || (this.robotMoving && e.pointerType == 'mouse') ){ 
             return; 
         }
 
@@ -213,12 +213,14 @@ class Party {
                     this.selectedElements.forEach(element => {
                         element.querySelector('.flip-card-inner').classList.toggle('flip')
                     });
+                    this.checkResult();
                     this.moveStatus = moveStatus.ready;
                     this.selectedElements = [];
                     this.changePlayer();
+
                 }, 2000 );
                 
-                this.checkResult();
+                // this.checkResult();
                 break;
             case moveStatus.idle:
                 break;
@@ -233,7 +235,7 @@ class Party {
         let mode;
 
         if (this.selectedElements[0].dataset.img_id == this.selectedElements[1].dataset.img_id){
-            setTimeout(() => {
+            // setTimeout(() => {
                 this.selectedElements.forEach(element => {
                     element.style.visibility = 'hidden';
                 })
@@ -245,7 +247,7 @@ class Party {
                     return;
                 }
                 this.moveStatus = moveStatus.ready;
-            }, 1000);
+            // }, 1000);
             mode = 'R'; // remove
         } else {
             mode = 'O'; // open
@@ -260,6 +262,7 @@ class Party {
     start(){
         this.started = true;
         this.randomChooseFirst();
+        elScoreboard.style.visibility = 'visible';
     }
 
     finish(){
@@ -288,16 +291,17 @@ class Party {
         console.log(this.currentPlayer);
         this.prepareForMove();
     }
-
-}
+ }
 
 class Player {
-    constructor(){
+    constructor(scoreboard_id){
         this.score = 0;
+        this.scoreboard_id = scoreboard_id;
     }
 
     addPoint(){
         this.score += 1;
+        document.querySelector(`#${this.scoreboard_id}`).textContent = this.score;
     }
 
     makeMove(){
@@ -307,6 +311,7 @@ class Player {
 
 class Robot extends Player {
     makeMove(){
+        console.log(this.foundPairs);
         if (this.foundPairs.length > 0){
             let nextMoveAr = this.foundPairs.pop();
             nextMoveAr.forEach(element => {
@@ -332,12 +337,12 @@ class Robot extends Player {
         let randomTileId;
         let randIndex = Math.floor(Math.random() * this.unknownTiles.length);
         if (randIndex == prevElIndex){
-            randIndex++;
+            randIndex = this.unknownTiles.length % (randIndex + 1);
         }
         randomTileId = this.unknownTiles[randIndex];
+        console.log(this.unknownTiles);
+        console.log([randIndex, randomTileId]);
         return [randIndex, randomTileId];
-        console.log('rt_id ' + randomTileId);
-
     }
 
     makeRandomMove(){
