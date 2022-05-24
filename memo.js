@@ -1,6 +1,5 @@
 // TODO:
 // - завершение игры
-// - блокировка во время хода робота
 // - Уровни - процент запоминания 
 // - стили
 // - рефакторинг
@@ -216,8 +215,9 @@ class Party {
                     this.checkResult();
                     this.moveStatus = moveStatus.ready;
                     this.selectedElements = [];
-                    this.changePlayer();
-
+                    if (this.started){
+                        this.changePlayer();
+                    }
                 }, 2000 );
                 
                 // this.checkResult();
@@ -267,7 +267,22 @@ class Party {
 
     finish(){
         this.started = false;
-        alert('Game is over!');
+        elMsg.style.visibility = 'visible'; //alert('Game is over!');
+        elMsg.innerText = this.getResultMessage();
+    }
+
+    getResultMessage(){
+        if (this.humanPlayer.score == this.robotPlayer.score){
+            return 'Draw';
+        } else {
+            let state;
+            if (this.humanPlayer.score < this.robotPlayer.score){
+                state = 'lose';
+            } else {
+                state = 'win';
+            }
+            return `You ${state}`;
+        }
     }
 
     changePlayer(){
