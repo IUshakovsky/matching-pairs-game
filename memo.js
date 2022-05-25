@@ -1,7 +1,9 @@
 // TODO:
 // - завершение игры
+// - как начать новую
 // - Уровни - процент запоминания 
 // - стили
+// - effects 
 // - рефакторинг
 
 // количество 24(4x6), 28(4x7), 32(4x8), 40(5x8), 50(5x10)
@@ -103,7 +105,7 @@ class Game {
             pairs: x * y /2
         };
 
-        let newMaxWidthVH = Math.round( 90 * (x / ( 1.4 * y ) ) );
+        let newMaxWidthVH = Math.round( 85 * (x / ( 1.4 * y ) ) - 2 );
         elContainer.style.setProperty('max-width', `${newMaxWidthVH}vh`);
         this.initializeImgs();    
         this.createTiles();

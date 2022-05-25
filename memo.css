@@ -1,7 +1,7 @@
 .container {
     display: grid;
-    max-height: 90vh;
-    /* max-width: 90vh; */
+    max-height: 85vh;
+    margin: auto;  
 }
 
 #scoreboard {
