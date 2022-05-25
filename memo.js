@@ -4,7 +4,7 @@
 // - стили
 // - рефакторинг
 
-// количество 24(4x6), 28(4x7), 30(5x6), 40(5x8), 50(5x10)
+// количество 24(4x6), 28(4x7), 32(4x8), 40(5x8), 50(5x10)
 
 const SRC_COVER = 'icons/cover.png';
 const ICONS_AMNT = 29;
@@ -83,8 +83,8 @@ class Game {
                 y = 4;
                 break;
             case 3:
-                x = 6;
-                y = 5;
+                x = 8;
+                y = 4;
                 break;
             case 4:
                 x = 8;
@@ -103,6 +103,8 @@ class Game {
             pairs: x * y /2
         };
 
+        let newMaxWidthVH = Math.round( 90 * (x / ( 1.4 * y ) ) );
+        elContainer.style.setProperty('max-width', `${newMaxWidthVH}vh`);
         this.initializeImgs();    
         this.createTiles();
     }
