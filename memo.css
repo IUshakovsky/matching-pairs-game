@@ -1,5 +1,5 @@
 body {
-  font-family: sans-serif;
+  font-family: monospace,sans-serif;
 }
 
 .container {
@@ -11,6 +11,8 @@ body {
 #scoreboard {
     visibility: hidden;
     display: flex;
+    font-size: 3em;
+
 }
 
 .upper_bar {
@@ -22,15 +24,21 @@ body {
   text-align: center;
 }
 
+#btn_start {
+  margin-top: 0.5em;
+  width: 60px
+}
+
 #sliders {
   margin-right: auto;
 }
 
-.settings {
+.top_box {
   margin: 5px;
   padding: 5px;
-  border: 1px solid black;
-  box-shadow: 2px 2px
+  border: 0.6px solid black;
+  box-shadow: 2px 2px;
+  height: 5em
 }
 
 .right {
@@ -78,5 +86,14 @@ body {
   }
 
   #message{
+    visibility: hidden;
+  }
+
+  #status_bar {
+    font-size: 0.7em;
+    color: cadetblue;
+    position:absolute;
+    width:100%;
+    bottom:0px;
     visibility: hidden;
   }

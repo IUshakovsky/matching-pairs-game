@@ -1,6 +1,7 @@
 // TODO:
 // - завершение игры
 // - как начать новую
+// - Шрифты, digital для табли
 // - Уровни - процент запоминания 
 // - стили
 // - effects 
@@ -17,6 +18,8 @@ const elSliderLevel = document.querySelector('#s_level');
 const elMsg = document.querySelector('#message');
 const elBtnStart = document.querySelector('#btn_start');
 const elScoreboard = document.querySelector('#scoreboard');
+const elSettings = document.querySelector('.settings');
+const elStatusBar = document.querySelector('#status_bar');
 
 
 window.onload = () =>  { 
@@ -267,6 +270,8 @@ class Party {
         this.started = true;
         this.randomChooseFirst();
         elScoreboard.style.visibility = 'visible';
+        elSettings.style.display = 'none';
+        elStatusBar.style.visibility = 'visible';
     }
 
     finish(){
