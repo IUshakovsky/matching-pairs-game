@@ -1,7 +1,7 @@
 // TODO:
 // - завершение игры
 // - как начать новую
-// - Шрифты, digital для табли
+// - Шрифты, digital для табло
 // - Уровни - процент запоминания 
 // - стили
 // - effects 
@@ -21,6 +21,21 @@ const elScoreboard = document.querySelector('#scoreboard');
 const elSettings = document.querySelector('.settings');
 const elStatusBar = document.querySelector('#status_bar');
 
+const FieldSize = {
+    1:'tiny',
+    2:'small',
+    3:'medium',
+    4:'large',
+    5:'hudge'    
+}
+
+const RobotLevel = {
+    1:'junior',
+    2:'middle',
+    3:'senior',
+    4:'lead',
+    5:'boss'
+}
 
 window.onload = () =>  { 
     let game = new Game();
@@ -41,15 +56,19 @@ class Game {
     }
 
     setLevelVal(){
-        let el = document.querySelector('#level_config');
-        el.value = elSliderLevel.value;
+        let elLevel = document.querySelector('#level_config');
+        let elLevelStatus = document.querySelector('#status_level');
+        elLevel.value = RobotLevel[elSliderLevel.value];
+        elLevelStatus.textContent = RobotLevel[elSliderLevel.value];
         let level = parseInt(elSliderLevel.value);
         this.setLevel(level);
     }
 
     setAmntVal(){
-        let el = document.querySelector('#tiles_config');
-        el.value = elSliderAmnt.value;
+        let elFieldSize = document.querySelector('#tiles_config');
+        let elFieldSizeStatus = document.querySelector('#status_field');
+        elFieldSize.value = FieldSize[elSliderAmnt.value];
+        elFieldSizeStatus.textContent = FieldSize[elSliderAmnt.value];
         let amnt = parseInt(elSliderAmnt.value);
         this.setField(amnt);
         this.party.setPartyField(this.field);

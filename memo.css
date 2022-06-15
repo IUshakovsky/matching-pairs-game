@@ -34,6 +34,7 @@ body {
 }
 
 .top_box {
+
   margin: 5px;
   padding: 5px;
   border: 0.6px solid black;
@@ -68,32 +69,31 @@ body {
     text-align: center;
     transition: transform 0.8s;
     transform-style: preserve-3d;
-  }
+}
 
 .flip-card-front, .flip-card-back {
     grid-area: 1/1;
-    /* width: 100%;
-    height: 100%; */
     -webkit-backface-visibility: hidden;  /* Safari */ 
     backface-visibility: hidden;
-  }
+}
 
-  .flip-card-back {
+.flip-card-back {
     transform: rotateY(180deg);
     border: 1px solid black;
     display: grid;
     place-items: center;
-  }
+}
 
-  #message{
+#message{
     visibility: hidden;
-  }
+    text-align: center;
+}
 
-  #status_bar {
+#status_bar {
     font-size: 0.7em;
-    color: cadetblue;
+    color: grey;
     position:absolute;
     width:100%;
     bottom:0px;
     visibility: hidden;
-  }
+}
