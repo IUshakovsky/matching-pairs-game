@@ -1,6 +1,4 @@
 // TODO:
-// - завершение игры
-// - как начать новую
 // - Шрифты, digital для табло
 // - Уровни - процент запоминания 
 // - стили
@@ -20,6 +18,7 @@ const elBtnStart = document.querySelector('#btn_start');
 const elScoreboard = document.querySelector('#scoreboard');
 const elSettings = document.querySelector('.settings');
 const elStatusBar = document.querySelector('#status_bar');
+const elResult = document.querySelector('#result');
 
 const FieldSize = {
     1:'tiny',
@@ -295,8 +294,10 @@ class Party {
 
     finish(){
         this.started = false;
-        elMsg.style.visibility = 'visible'; //alert('Game is over!');
-        elMsg.innerText = this.getResultMessage();
+        elMsg.style.visibility = 'hidden'; 
+        elContainer.style.display = 'none';
+        elResult.style.display = 'block';
+        elResult.querySelector("#result_msg").innerText = this.getResultMessage();
     }
 
     getResultMessage(){

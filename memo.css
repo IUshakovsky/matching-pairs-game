@@ -20,6 +20,16 @@ body {
   justify-content: center;
 }
 
+#result {
+  display: block;
+  text-align: center;
+  display: none;
+}
+
+#result_msg {
+  font-size: 3em;
+}
+
 .button {
   text-align: center;
 }
@@ -34,9 +44,8 @@ body {
 }
 
 .top_box {
-
   margin: 5px;
-  padding: 5px;
+  padding: 5px 20px 5px 20px;
   border: 0.6px solid black;
   box-shadow: 2px 2px;
   height: 5em
@@ -87,6 +96,7 @@ body {
 #message{
     visibility: hidden;
     text-align: center;
+    background-color: orange;
 }
 
 #status_bar {
