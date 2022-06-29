@@ -14,7 +14,6 @@ const elContainer = document.querySelector('.container');
 const elSliderAmnt = document.querySelector('#s_tiles_amnt');
 const elSliderLevel = document.querySelector('#s_level');
 const elMsg = document.querySelector('#message');
-const elBtnStart = document.querySelector('#btn_start');
 const elScoreboard = document.querySelector('#scoreboard');
 const elSettings = document.querySelector('.settings');
 const elStatusBar = document.querySelector('#status_bar');
@@ -40,7 +39,11 @@ window.onload = () =>  {
     let game = new Game();
     elSliderAmnt.addEventListener('input', game.setAmntVal.bind(game));
     elSliderLevel.addEventListener('input', game.setLevelVal.bind(game));
+    let elBtnStart = document.querySelector('#btn_start');
     elBtnStart.addEventListener('click', game.party.start.bind(game.party));
+
+    let elBtnRestart = document.querySelector('#btn_restart');
+    elBtnRestart.addEventListener('click', () => window.location.reload(false) )
     game.setAmntVal();
     game.setLevelVal();
 }
@@ -90,7 +93,6 @@ class Game {
 
         // Shuffle 
         this.shuffleArray(this.imgInds);
-        console.log(this.imgInds);
     }
 
     setField(size){
@@ -245,7 +247,6 @@ class Party {
                     }
                 }, 2000 );
                 
-                // this.checkResult();
                 break;
             case moveStatus.idle:
                 break;
@@ -260,7 +261,6 @@ class Party {
         let mode;
 
         if (this.selectedElements[0].dataset.img_id == this.selectedElements[1].dataset.img_id){
-            // setTimeout(() => {
                 this.selectedElements.forEach(element => {
                     element.style.visibility = 'hidden';
                 })
@@ -272,7 +272,6 @@ class Party {
                     return;
                 }
                 this.moveStatus = moveStatus.ready;
-            // }, 1000);
             mode = 'R'; // remove
         } else {
             mode = 'O'; // open
@@ -297,7 +296,7 @@ class Party {
         elMsg.style.visibility = 'hidden'; 
         elContainer.style.display = 'none';
         elResult.style.display = 'block';
-        elResult.querySelector("#result_msg").innerText = this.getResultMessage();
+        elResult.querySelector("#result_msg").innerText = `Game over. ${this.getResultMessage()}`;
     }
 
     getResultMessage(){
@@ -332,7 +331,6 @@ class Party {
 
     randomChooseFirst(){   
         this.currentPlayer = ( Math.round( Math.random() ) ) ? this.humanPlayer : this.robotPlayer;
-        console.log(this.currentPlayer);
         this.prepareForMove();
     }
  }
@@ -355,7 +353,6 @@ class Player {
 
 class Robot extends Player {
     makeMove(){
-        console.log(this.foundPairs);
         if (this.foundPairs.length > 0){
             let nextMoveAr = this.foundPairs.pop();
             nextMoveAr.forEach(element => {
@@ -384,8 +381,6 @@ class Robot extends Player {
             randIndex = this.unknownTiles.length % (randIndex + 1);
         }
         randomTileId = this.unknownTiles[randIndex];
-        console.log(this.unknownTiles);
-        console.log([randIndex, randomTileId]);
         return [randIndex, randomTileId];
     }
 
@@ -467,7 +462,6 @@ class Robot extends Player {
                                 setTimeout(() => {
                                     let target = document.querySelector(`#${tile_id}`);
                                     target.dispatchEvent(new Event('click'));
-                                    console.log(target.dataset.img_id);
                                     resolve( target.dataset.img_id );
                                 }, 1000)
         );

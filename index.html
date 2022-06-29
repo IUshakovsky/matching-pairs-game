@@ -12,12 +12,12 @@
                     <div class='amnt_slider' >
                         <label for="s_tiles_amnt">Field size</label>
                         <input type='range' class='slider' id='s_tiles_amnt' min=1 max=5 step=1 value=2>
-                        <input type='text' class='slider_info' id='tiles_config'>
+                        <input type='text' class='slider_info' id='tiles_config' readonly>
                     </div>
                     <div class='level_slider right'>
                         <label for="s_level">Level:</label>
                         <input type='range' class='slider' id='s_level' min=1 max=5 step=1 value=2>
-                        <input type='text' class='slider_info' id='level_config'>
+                        <input type='text' class='slider_info' id='level_config' readonly>
                     </div>
                 </div>
                 <div class='button'>
@@ -25,9 +25,9 @@
                 </div>
             </div>    
             <div id="scoreboard">
-                <div class="score">YOU <span id="human_score">0</span> </div>
+                <div class="score">You <span id="human_score">0</span> </div>
                 :
-                <div class="score"><span id="robot_score">0</span> ROBOT</div>
+                <div class="score"><span id="robot_score">0</span> Robot</div>
             </div>
         </div>
     </div>

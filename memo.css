@@ -27,7 +27,7 @@ body {
 }
 
 #result_msg {
-  font-size: 3em;
+  font-size: 2em;
 }
 
 .button {
@@ -37,6 +37,12 @@ body {
 #btn_start {
   margin-top: 0.5em;
   width: 60px
+}
+
+#btn_restart {
+  margin-top: 10px;
+  font-size: 1.5em;
+  padding: 5px 15px;
 }
 
 #sliders {
