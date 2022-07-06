@@ -103,13 +103,12 @@ body {
     visibility: hidden;
     text-align: center;
     background-color: orange;
+    bottom: 0%;
 }
 
 #status_bar {
     font-size: 0.7em;
     color: grey;
-    position:absolute;
-    width:100%;
     bottom:0px;
     visibility: hidden;
 }
