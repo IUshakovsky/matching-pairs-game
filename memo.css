@@ -103,7 +103,7 @@ body {
     visibility: hidden;
     text-align: center;
     background-color: orange;
-    bottom: 0%;
+    /* bottom: 0%; */
 }
 
 #status_bar {
@@ -111,4 +111,5 @@ body {
     color: grey;
     bottom:0px;
     visibility: hidden;
+    position: absolute;
 }
