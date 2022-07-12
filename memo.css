@@ -93,6 +93,7 @@ body {
 }
 
 .flip-card-back {
+    margin: 2px;
     transform: rotateY(180deg);
     border: 1px solid black;
     display: grid;
