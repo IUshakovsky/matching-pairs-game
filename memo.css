@@ -93,7 +93,7 @@ body {
 }
 
 .flip-card-back {
-    margin: 2px;
+    margin-bottom: 4px;
     transform: rotateY(180deg);
     border: 1px solid black;
     display: grid;
@@ -108,9 +108,21 @@ body {
 }
 
 #status_bar {
+    display: block;
     font-size: 0.7em;
     color: grey;
     bottom:0px;
     visibility: hidden;
     position: absolute;
+    width: 100%;
+    /* overflow: auto; */
+}
+
+#status_left {
+    float: left;
+}
+
+#status_right {
+  float: right;
+  margin-right: 20px;
 }
