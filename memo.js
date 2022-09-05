@@ -402,12 +402,26 @@ class Robot extends Player {
 
     getRandIndex(prevElIndex) {
         let randomTileId;
-        let randIndex = Math.floor(Math.random() * this.unknownTiles.length);
-        if (randIndex == prevElIndex) {
-            randIndex = this.unknownTiles.length % (randIndex + 1);
+        let randIndex;
+        if ( this.unknownTiles.length > 0 ){
+            randIndex =  Math.floor(Math.random() * this.unknownTiles.length);
+            if (randIndex == prevElIndex) {
+                randIndex = this.unknownTiles.length % (randIndex + 1);
+            }
+            randomTileId = this.unknownTiles[randIndex];
+            return [randIndex, randomTileId];
+        } 
+        else if ( this.knownTiles.length > 0 ) {
+            randIndex =  Math.floor(Math.random() * this.knownTiles.keys().length);
+            if (randIndex == prevElIndex) {
+                randIndex = this.unknownTiles.length % (randIndex + 1);
+            }
+            randomTileId = this.unknownTiles[randIndex];
+            return [randIndex, randomTileId];
+        } else {
+
         }
-        randomTileId = this.unknownTiles[randIndex];
-        return [randIndex, randomTileId];
+        // this.
     }
 
     makeRandomMove() {
@@ -443,7 +457,7 @@ class Robot extends Player {
                 for (let key in data.moveData) {
                     this.unknownTiles = this.unknownTiles.filter(val => val != key);
                     delete this.knownTiles[key];
-                    this.foundPairs = this.foundPairs.filter(item => item[0] == key || item[1] == key);
+                    this.foundPairs = this.foundPairs.filter(item => item[0] != key || item[1] != key);
                 }
                 break;
         }
@@ -481,8 +495,6 @@ class Robot extends Player {
     }
 
     checkInFoundPairs(key) {
-        // let currFoundPairs = this.reduceArrayByLevel(this.foundPairs)
-
         this.foundPairs.forEach(pair => {
             if (pair[0] == key || pair[1] == key) {
                 return true;

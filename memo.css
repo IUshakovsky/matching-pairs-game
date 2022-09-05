@@ -104,7 +104,6 @@ body {
     visibility: hidden;
     text-align: center;
     background-color: orange;
-    /* bottom: 0%; */
 }
 
 #status_bar {
@@ -115,7 +114,6 @@ body {
     visibility: hidden;
     position: absolute;
     width: 100%;
-    /* overflow: auto; */
 }
 
 #status_left {
