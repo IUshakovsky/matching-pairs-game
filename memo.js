@@ -2,7 +2,6 @@
 // - рефакторинг
 // - в random move сделать проверку и выбор из knownTiles
 
-
 const SRC_COVER = 'icons/cover.png';
 const ICONS_AMNT = 29;
 
@@ -15,7 +14,7 @@ const elSettings = document.querySelector('.settings');
 const elStatusBar = document.querySelector('#status_bar');
 const elResult = document.querySelector('#result');
 
-const levelMemoryKoef = 0.3
+// const levelMemoryKoef = 0.3
 
 const FieldSize = {
     1: 'tiny',
@@ -302,7 +301,7 @@ class Party {
         elMsg.style.visibility = 'hidden';
         elContainer.style.display = 'none';
         elResult.style.display = 'block';
-        elResult.querySelector("#result_msg").innerText = `Game over. ${this.getResultMessage()}`;
+        elResult.querySelector('#result_msg').innerText = `Game over. ${this.getResultMessage()}`;
     }
 
     getResultMessage() {
@@ -358,10 +357,10 @@ class Player {
 
 class Robot extends Player {
     makeMove() {
-        let tempFoundPairs = this.reduceArrayByLevel(this.foundPairs)
-        if (tempFoundPairs.length > 0) {
-            let nextMoveAr = this.foundPairs.pop();
-            nextMoveAr.forEach(element => {
+        // let tempFoundPairs = this.reduceArrayByLevel(this.foundPairs)
+        let foundPair = this.getFoundPairByLevel(); 
+        if (foundPair != undefined) {
+            foundPair.forEach(element => {
                 this.clickTile(element);
             });
         } else {
@@ -387,6 +386,7 @@ class Robot extends Player {
                 this.levelMemoryKoef = 1;
                 break;
         }
+        console.log(this.levelMemoryKoef)
     }
 
     updFieldInfo(field) {
@@ -409,7 +409,6 @@ class Robot extends Player {
                 randIndex = this.unknownTiles.length % (randIndex + 1);
             }
             randomTileId = this.unknownTiles[randIndex];
-            return [randIndex, randomTileId];
         } 
         else if ( this.knownTiles.length > 0 ) {
             randIndex =  Math.floor(Math.random() * this.knownTiles.keys().length);
@@ -417,11 +416,15 @@ class Robot extends Player {
                 randIndex = this.unknownTiles.length % (randIndex + 1);
             }
             randomTileId = this.unknownTiles[randIndex];
-            return [randIndex, randomTileId];
         } else {
-
+            let tilesFromPairs = [];
+            for (let pair of this.foundPairs){
+                tilesFromPairs = tilesFromPairs.concat(pair);
+            }
+            randIndex = Math.floor(Math.random() * tilesFromPairs.length);
+            randomTileId = tilesFromPairs[randIndex];
         }
-        // this.
+        return [randIndex, randomTileId];
     }
 
     makeRandomMove() {
@@ -471,6 +474,17 @@ class Robot extends Player {
             newArr = newArr.slice(0, newLen);
         }
         return newArr;
+    }
+
+    getFoundPairByLevel(){
+        if (this.foundPairs.length > 0){
+            if (Math.random() < this.levelMemoryKoef){
+                return this.foundPairs.pop();
+            } else {
+                console.log('There are found pairs, but I dont remember')
+                return undefined;
+            }
+        }
     }
 
     checkInMemory(key, value, isMoving = false) {
@@ -530,4 +544,3 @@ class Robot extends Player {
 
 class Human extends Player {
 }
-
