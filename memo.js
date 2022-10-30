@@ -1,6 +1,5 @@
 // TODO:
 // - рефакторинг
-// - в random move сделать проверку и выбор из knownTiles
 
 const SRC_COVER = 'icons/cover.png';
 const ICONS_AMNT = 29;
@@ -14,8 +13,6 @@ const elSettings = document.querySelector('.settings');
 const elStatusBar = document.querySelector('#status_bar');
 const elResult = document.querySelector('#result');
 
-// const levelMemoryKoef = 0.3
-
 const FieldSize = {
     1: 'tiny',
     2: 'small',
@@ -28,8 +25,8 @@ const RobotLevel = {
     1: 'junior',
     2: 'middle',
     3: 'senior',
-    4: 'lead',
-    5: 'boss'
+    4: 'lead'
+    // 5: 'boss'
 }
 
 function shuffleArray(arr) {
@@ -187,7 +184,6 @@ class Game {
 
         elContainer.appendChild(el_tile);
     }
-
 }
 
 moveStatus = {
@@ -371,10 +367,10 @@ class Robot extends Player {
     setLevel(level) {
         switch (level) {
             case 1:
-                this.levelMemoryKoef = 0.2;
+                this.levelMemoryKoef = 0.1;
                 break;
             case 2:
-                this.levelMemoryKoef = 0.4;
+                this.levelMemoryKoef = 0.3;
                 break;
             case 3:
                 this.levelMemoryKoef = 0.6;
@@ -382,9 +378,9 @@ class Robot extends Player {
             case 4:
                 this.levelMemoryKoef = 0.8;
                 break;
-            case 5:
-                this.levelMemoryKoef = 1;
-                break;
+            // case 5:
+            //     this.levelMemoryKoef = 1;
+            //     break;
         }
         console.log(this.levelMemoryKoef)
     }
@@ -403,28 +399,50 @@ class Robot extends Player {
     getRandIndex(prevElIndex) {
         let randomTileId;
         let randIndex;
-        if ( this.unknownTiles.length > 0 ){
-            randIndex =  Math.floor(Math.random() * this.unknownTiles.length);
-            if (randIndex == prevElIndex) {
-                randIndex = this.unknownTiles.length % (randIndex + 1);
+        
+        if ( this.unknownTiles.length > 0  ){
+            console.log('reading from unknown tiles')
+            if ( this.unknownTiles.length == 1 && prevElIndex != undefined ) {
+                prevElIndex = undefined;
+            } else {
+                randIndex =  Math.floor(Math.random() * this.unknownTiles.length);
+                console.log(prevElIndex, randIndex)
+                if (randIndex == prevElIndex) {
+                    randIndex = this.unknownTiles.length % (randIndex + 1);
+                    console.log('same, found another', randIndex, this.unknownTiles.length)
+                }
+                randomTileId = this.unknownTiles[randIndex];
+                return [randIndex, randomTileId];
             }
-            randomTileId = this.unknownTiles[randIndex];
         } 
-        else if ( this.knownTiles.length > 0 ) {
-            randIndex =  Math.floor(Math.random() * this.knownTiles.keys().length);
-            if (randIndex == prevElIndex) {
-                randIndex = this.unknownTiles.length % (randIndex + 1);
+        
+        let knownKeys = Object.keys(this.knownTiles);
+        if ( knownKeys.length > 0 ) {
+            if ( knownKeys.length == 1 && prevElIndex != undefined ) {
+                prevElIndex = undefined;
+            } else {
+                randIndex =  Math.floor(Math.random() * knownKeys.length);
+                if (randIndex == prevElIndex) {
+                    randIndex = knownKeys.length % (randIndex + 1);
+                }
+                randomTileId = knownKeys[randIndex];
+                console.log(randomTileId, 'from known tiles')
+                return [randIndex, randomTileId]; 
             }
-            randomTileId = this.unknownTiles[randIndex];
-        } else {
+        } 
+        
+        else {
             let tilesFromPairs = [];
             for (let pair of this.foundPairs){
                 tilesFromPairs = tilesFromPairs.concat(pair);
             }
             randIndex = Math.floor(Math.random() * tilesFromPairs.length);
+            if (randIndex == prevElIndex) {
+                randIndex = tilesFromPairs.length % (randIndex + 1);
+            }
             randomTileId = tilesFromPairs[randIndex];
+            return [randIndex, randomTileId];
         }
-        return [randIndex, randomTileId];
     }
 
     makeRandomMove() {
