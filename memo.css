@@ -12,7 +12,6 @@ body {
     visibility: hidden;
     display: flex;
     font-size: 3em;
-
 }
 
 .upper_bar {
@@ -93,6 +92,7 @@ body {
 }
 
 .flip-card-back {
+    margin-bottom: 4px;
     transform: rotateY(180deg);
     border: 1px solid black;
     display: grid;
@@ -103,13 +103,23 @@ body {
     visibility: hidden;
     text-align: center;
     background-color: orange;
-    /* bottom: 0%; */
 }
 
 #status_bar {
+    display: block;
     font-size: 0.7em;
     color: grey;
     bottom:0px;
     visibility: hidden;
     position: absolute;
+    width: 100%;
+}
+
+#status_left {
+    float: left;
+}
+
+#status_right {
+  float: right;
+  margin-right: 20px;
 }

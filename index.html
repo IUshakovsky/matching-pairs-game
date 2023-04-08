@@ -16,7 +16,7 @@
                     </div>
                     <div class='level_slider right'>
                         <label for="s_level">Level:</label>
-                        <input type='range' class='slider' id='s_level' min=1 max=5 step=1 value=2>
+                        <input type='range' class='slider' id='s_level' min=1 max=4 step=1 value=2>
                         <input type='text' class='slider_info' id='level_config' readonly>
                     </div>
                 </div>
@@ -45,7 +45,14 @@
         <p>Your turn</p>
     </div>
     <div id="status_bar">
-        level: <span id="status_level"></span>; field size: <span id="status_field"></span>
+        <div id="status_left">
+            level: <span id="status_level"></span>; field size: <span id="status_field"></span>
+        </div>
+        <div id="status_right">
+            Iconset <a rel='external' href='https://www.iconfinder.com/iconsets/zoo-line-welcome-to-zootopia'>Zoo Line</a>
+            by <a rel='external' href='https://www.iconfinder.com/Chanut-is'>Chanut</a> 
+            is licensed under <a rel='external' href='http://creativecommons.org/licenses/by/3.0/'>CC BY 3.0</a>
+        </div>
     </div>
     <script type="text/javascript" src="memo.js"></script>
 </body>
